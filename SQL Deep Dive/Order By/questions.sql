@@ -22,4 +22,4 @@ order birth_date);
 
 select first_name, last_name, hire_date from employees
 where first_name ilike 'K%'
-order by hire_date 
+order by hire_date;
