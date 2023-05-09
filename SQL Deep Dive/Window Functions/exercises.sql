@@ -4,8 +4,11 @@
 *  Table: Country
 */
 
-SELECT *
-FROM country;
+select distinct continent,
+       sum(population) over(
+       PARTITION by continent
+       )
+from country
 
 /*
 *  To the previous query add on the ability to calculate the percentage of the world population
@@ -17,8 +20,11 @@ FROM country;
 *  Table: Country
 */
 
-SELECT *
-FROM country;
+select distinct continent,
+       sum(population) over(partition by continent) as "ppc",
+       concat(round(sum(population) over(partition by continent) /(sum(population) over()::float) * 100), ' percantage of population')
+from country
+
 
 
 /*
@@ -28,5 +34,12 @@ FROM country;
 *  Table: Regions (Join + Window function)
 */
 
-SELECT *
-FROM regions AS r;
+select distinct r.id,
+       r.name,
+       count(t.id) over(
+       PARTITION by r.id
+       )
+from regions as r
+inner join departments as d on d.region = r.code
+inner join towns as t on t.department = d.code
+order by r.id;
